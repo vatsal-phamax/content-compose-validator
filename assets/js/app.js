@@ -36,6 +36,7 @@ const dz = document.getElementById("drop-zone"),
 const pasteEl = document.getElementById("paste"),
   runBtn = document.getElementById("run-btn");
 const resetBtn = document.getElementById("reset-btn"),
+  resetBtnInline = document.getElementById("reset-btn-inline"),
   rawCopyBtn = document.getElementById("raw-copy-btn");
 const summaryEl = document.getElementById("summary");
 const metaEl = document.getElementById("meta"),
@@ -62,6 +63,7 @@ dz.addEventListener("drop", (e) => {
 });
 fi.addEventListener("change", () => fi.files[0] && read(fi.files[0]));
 resetBtn.addEventListener("click", reset);
+resetBtnInline.addEventListener("click", reset);
 rawCopyBtn.addEventListener("click", copyRaw);
 
 // Main tabs: Findings / Explorer
@@ -128,7 +130,8 @@ function reset() {
   mainFindings.style.display  = "none";
   mainExplorer.style.display  = "none";
   explorerEmpty.style.display = "";
-  resetBtn.style.display      = "none";
+  resetBtn.style.display       = "none";
+  resetBtnInline.style.display = "none";
 
   // Restore default tab for next run
   document.querySelectorAll(".main-tab").forEach((t) => t.classList.remove("active"));
@@ -334,7 +337,8 @@ function validate(data) {
   mainTabBar.style.display    = "flex";
   explorerEmpty.style.display = "none";
   mainFindings.style.display  = "flex";
-  resetBtn.style.display      = "";
+  resetBtn.style.display       = "";
+  resetBtnInline.style.display = "";
   mtabCount.textContent       = rs.length;
 }
 
