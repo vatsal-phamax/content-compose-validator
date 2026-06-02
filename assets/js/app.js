@@ -349,118 +349,35 @@ function tog(i) {
   b.previousElementSibling?.classList.toggle("open");
 }
 
-// ── JSON tree renderer ────────────────────────────────────────────────────────
+// ── JSON viewer (JSONEditor in view mode) ─────────────────────────────────────
 
-function buildJsonNode(key, val, depth) {
-  const isArr = Array.isArray(val);
-  const type = val === null ? "null" : isArr ? "array" : typeof val;
-  const isComplex = type === "object" || type === "array";
-
-  function makeKeyEl() {
-    const k = document.createElement("span");
-    k.className = "jt-k";
-    k.textContent = `"${key}"`;
-    if (depth === 1) k.dataset.jtKey = String(key);
-    const colon = document.createElement("span");
-    colon.className = "jt-punc";
-    colon.textContent = ": ";
-    return [k, colon];
-  }
-
-  if (!isComplex) {
-    const line = document.createElement("div");
-    line.className = "jt-line";
-    if (key !== null) line.append(...makeKeyEl());
-    const span = document.createElement("span");
-    if (type === "string") {
-      span.className = "jt-s";
-      span.textContent = val.length > 140 ? `"${val.slice(0, 140)}…"` : `"${val}"`;
-      if (val.length > 140) span.title = `String — ${val.length} chars`;
-    } else if (type === "number") {
-      span.className = "jt-n";
-      span.textContent = String(val);
-    } else if (type === "boolean") {
-      span.className = "jt-bool";
-      span.textContent = String(val);
-    } else {
-      span.className = "jt-null";
-      span.textContent = "null";
-    }
-    line.appendChild(span);
-    return line;
-  }
-
-  const entries = isArr ? [...val].map((v, i) => [i, v]) : Object.entries(val);
-  const count = entries.length;
-  const [ob, cb] = isArr ? ["[", "]"] : ["{", "}"];
-  const hint = `${count} ${isArr ? "item" : "key"}${count !== 1 ? "s" : ""}`;
-
-  const node = document.createElement("div");
-  node.className = "jt-node" + (depth <= 1 ? " open" : "");
-
-  const head = document.createElement("div");
-  head.className = "jt-head";
-  if (key !== null) head.append(...makeKeyEl());
-
-  const caret = document.createElement("span");
-  caret.className = "jt-caret";
-  caret.textContent = "▶";
-
-  const obEl = document.createElement("span");
-  obEl.className = "jt-bracket";
-  obEl.textContent = ob;
-
-  const hintEl = document.createElement("span");
-  hintEl.className = "jt-hint";
-  hintEl.textContent = ` ${hint} `;
-
-  const cbHint = document.createElement("span");
-  cbHint.className = "jt-bracket jt-hint-cb";
-  cbHint.textContent = cb;
-
-  hintEl.appendChild(cbHint);
-  head.append(caret, obEl, hintEl);
-  head.addEventListener("click", () => node.classList.toggle("open"));
-
-  const body = document.createElement("div");
-  body.className = "jt-body";
-  entries.forEach(([k, v]) => body.appendChild(buildJsonNode(isArr ? null : k, v, depth + 1)));
-
-  const end = document.createElement("div");
-  end.className = "jt-end";
-  const cbEl = document.createElement("span");
-  cbEl.className = "jt-bracket";
-  cbEl.textContent = cb;
-  end.appendChild(cbEl);
-
-  node.append(head, body, end);
-  return node;
-}
+let _jsonEditor = null;
 
 function renderRawJson(data) {
-  const pre = document.getElementById("raw-pre");
   const nav = document.getElementById("raw-nav");
-  pre.innerHTML = "";
   nav.innerHTML = "";
 
+  // Init editor once
+  if (!_jsonEditor) {
+    _jsonEditor = new JSONEditor(document.getElementById("raw-pre"), {
+      mode: "view",
+      navigationBar: false,
+      statusBar: false,
+      search: true,
+    });
+  }
+  _jsonEditor.set(data);
+
+  // Nav chips — use JSONEditor's scrollTo API
   if (typeof data === "object" && data !== null && !Array.isArray(data)) {
     Object.keys(data).forEach((k) => {
       const chip = document.createElement("button");
       chip.className = "jt-chip";
       chip.textContent = k;
       chip.addEventListener("click", () => {
-        const target = Array.from(pre.querySelectorAll("[data-jt-key]")).find(
-          (el) => el.dataset.jtKey === k,
-        );
-        if (!target) return;
-        pre.querySelector(".jt-node")?.classList.add("open");
-        target.scrollIntoView({ block: "nearest", behavior: "smooth" });
-        target.classList.add("jt-flash");
-        setTimeout(() => target.classList.remove("jt-flash"), 1200);
+        try { _jsonEditor.scrollTo([k]); } catch (_) {}
       });
       nav.appendChild(chip);
     });
   }
-
-  pre.appendChild(buildJsonNode(null, data, 0));
 }
