@@ -1147,7 +1147,7 @@ textarea:focus {
 }
 
 .jsoneditor-menu {
-  background: var(--surface-2) !important;
+  background: var(--accent) !important;
   border-bottom: 1px solid var(--border) !important;
   border-radius: 8px 8px 0 0 !important;
   padding: 3px 6px !important;
