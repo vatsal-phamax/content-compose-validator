@@ -226,6 +226,14 @@ body {
   min-height: 0;
 }
 
+.app-shell.compact .app-body {
+  grid-template-columns: 1fr;
+}
+
+.app-shell.compact .panel-left {
+  display: none;
+}
+
 @media (max-width: 1024px) {
   .app-body {
     grid-template-columns: 260px 1fr;

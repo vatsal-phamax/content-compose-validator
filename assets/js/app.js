@@ -36,6 +36,7 @@ const dz = document.getElementById("drop-zone"),
 const pasteEl = document.getElementById("paste"),
   runBtn = document.getElementById("run-btn");
 const resetBtn = document.getElementById("reset-btn"),
+  toggleInputBtn = document.getElementById("toggle-input-btn"),
   resetBtnInline = document.getElementById("reset-btn-inline"),
   rawCopyBtn = document.getElementById("raw-copy-btn");
 const summaryEl = document.getElementById("summary");
@@ -51,6 +52,14 @@ const explorerEmpty  = document.getElementById("explorer-empty");
 const mainFindings   = document.getElementById("main-findings");
 const mainExplorer   = document.getElementById("main-explorer");
 const mtabCount      = document.getElementById("mtab-count");
+const appShell       = document.querySelector(".app-shell");
+
+function setCompactMode(isCompact) {
+  appShell.classList.toggle("compact", isCompact);
+  if (toggleInputBtn) {
+    toggleInputBtn.textContent = isCompact ? "Show Input" : "Hide Input";
+  }
+}
 
 // -- Event listeners -----------------------------------------------------------
 dz.addEventListener("click", () => fi.click());
@@ -65,6 +74,13 @@ fi.addEventListener("change", () => fi.files[0] && read(fi.files[0]));
 resetBtn.addEventListener("click", reset);
 resetBtnInline.addEventListener("click", reset);
 rawCopyBtn.addEventListener("click", copyRaw);
+if (toggleInputBtn) {
+  toggleInputBtn.addEventListener("click", () => {
+    setCompactMode(!appShell.classList.contains("compact"));
+  });
+}
+
+setCompactMode(false);
 
 // Main tabs: Findings / Explorer
 document.querySelectorAll(".main-tab").forEach((tab) => {

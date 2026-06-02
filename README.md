@@ -1,6 +1,18 @@
-# Ariya — Content Compose Validator
+# Ariya — Validator Suite
 
-A browser-based tool for validating `output_design_*.json` files produced by the Ariya Content Compose pipeline. No backend, no build step — pure HTML/CSS/JS deployed to GitHub Pages.
+A browser-based validator suite with two tools:
+
+- Content Compose Validator for `output_design_*.json`
+- Template Validator for `template.json`
+
+No backend, no build step - pure HTML/CSS/JS deployed to GitHub Pages.
+
+## Home Page
+
+The root page (`index.html`) is now a launcher with two cards that navigate to:
+
+- `validators/content-compose-validator.html`
+- `validators/template-validator.html`
 
 ## Access
 
@@ -17,7 +29,7 @@ The key is hashed with SHA-256 in the browser and never transmitted anywhere. Th
 
 ## Usage
 
-1. Open the tool with a valid key
+1. Open the home page and choose a validator card
 2. **Upload** an `output_design_*.json` file via drag-and-drop or file picker — or **paste** raw JSON into the text area
 3. Click **Run Validation**
 4. Review results across two panels:

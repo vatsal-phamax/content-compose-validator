@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Validate template.json with structured findings, instruction checks, and template explorer views."
+    />
+    <title>Ariya - Template Validator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23f97316'/><path d='M9 17l5 5 9-10' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/></svg>"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/jsoneditor@9/dist/jsoneditor.min.css"
+    />
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/css/template-validator.css" />
+    <script>
+      if (sessionStorage.getItem("ariya_unlocked") === "1") {
+        document.documentElement.dataset.unlocked = "1";
+      }
+    </script>
+  </head>
+  <body>
+    <div id="gate-overlay" class="gate-overlay">
+      <div class="gate-card">
+        <div class="gate-brand">
+          <div class="brand-icon">
+            <svg viewBox="0 0 20 20" fill="none" width="16" height="16">
+              <path
+                d="M10 2.5L3.5 6.75v6.5L10 17.5l6.5-4.25v-6.5L10 2.5z"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M7.5 10.5l1.75 1.75 3.25-3.5"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+          <span class="brand-name">Template Validator</span>
+          <span class="brand-badge">ARIYA</span>
+        </div>
+        <p class="gate-desc">Enter your access key to continue.</p>
+        <form id="gate-form" class="gate-form" autocomplete="off">
+          <input
+            id="gate-key-input"
+            type="password"
+            placeholder="Access key"
+            class="gate-input"
+            spellcheck="false"
+          />
+          <button type="submit" class="btn btn-full">Unlock</button>
+        </form>
+        <p id="gate-error" class="gate-error" style="display: none">
+          Invalid key. Please try again.
+        </p>
+      </div>
+    </div>
+
+    <div class="app-shell">
+      <header class="app-header">
+        <div class="header-brand">
+          <div class="brand-icon">
+            <svg viewBox="0 0 20 20" fill="none" width="16" height="16">
+              <path
+                d="M10 2.5L3.5 6.75v6.5L10 17.5l6.5-4.25v-6.5L10 2.5z"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M7.5 10.5l1.75 1.75 3.25-3.5"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+          <span class="brand-name">Template Validator</span>
+          <span class="brand-badge">ARIYA</span>
+        </div>
+        <div class="header-actions">
+          <button class="btn-ghost" id="toggle-input-btn" title="Toggle input panel">
+            Hide Input
+          </button>
+          <button class="btn-ghost" id="reset-btn" style="display: none">
+            <svg
+              viewBox="0 0 14 14"
+              fill="none"
+              width="12"
+              height="12"
+              aria-hidden="true"
+            >
+              <path
+                d="M2 7a5 5 0 1 1 1.5 3.5"
+                stroke="currentColor"
+                stroke-width="1.4"
+                stroke-linecap="round"
+              />
+              <path
+                d="M2 10.5V7h3.5"
+                stroke="currentColor"
+                stroke-width="1.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            Reset
+          </button>
+        </div>
+      </header>
+
+      <div class="app-body">
+        <div class="panel-left">
+          <div class="panel-section" id="upload-section">
+            <div class="section-eyebrow">Input</div>
+            <div class="upload-stack">
+              <div id="drop-zone" class="drop-zone">
+                <div class="drop-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
+                    <path
+                      d="M8 7V5.5C8 4.12 9.12 3 10.5 3h3C14.88 3 16 4.12 16 5.5V7"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                    />
+                    <rect
+                      x="5"
+                      y="7"
+                      width="14"
+                      height="14"
+                      rx="2"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                    />
+                    <path
+                      d="M12 11v6m0 0l-2.5-2.5M12 17l2.5-2.5"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+                <strong>Drop template.json here</strong>
+                <p>or click to choose file</p>
+                <input
+                  type="file"
+                  id="file-input"
+                  accept=".json"
+                  style="display: none"
+                />
+              </div>
+
+              <div class="paste-pane">
+                <div class="divider">or paste JSON</div>
+                <textarea
+                  id="paste"
+                  placeholder="Paste template.json content here..."
+                ></textarea>
+              </div>
+
+              <button class="btn btn-full" id="run-btn">Run Validation</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-right">
+          <div id="context-panel" style="display: none" class="context-panel">
+            <div class="summary" id="summary"></div>
+            <div class="meta" id="meta"></div>
+          </div>
+
+          <div id="main-tab-bar" class="main-tab-bar" style="display: none">
+            <button class="main-tab active" data-main="findings">
+              Findings
+              <span class="mtab-badge" id="mtab-count"></span>
+            </button>
+            <button class="main-tab" data-main="explorer">Explorer</button>
+          </div>
+
+          <div id="explorer-empty" class="explorer-empty">
+            <div class="explorer-empty-icon" aria-hidden="true">
+              <svg viewBox="0 0 52 52" fill="none" width="52" height="52">
+                <rect
+                  x="11"
+                  y="5"
+                  width="30"
+                  height="40"
+                  rx="3"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                />
+                <path
+                  d="M17 17h18M17 23h18M17 29h12"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                />
+                <circle
+                  cx="38"
+                  cy="38"
+                  r="8"
+                  fill="var(--bg)"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                />
+                <path
+                  d="M36 38h4M38 36v4"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </div>
+            <p class="explorer-empty-title">No validation results yet</p>
+            <p class="explorer-empty-desc">
+              Upload or paste a <code>template.json</code> file, then hit Run
+              Validation.
+            </p>
+          </div>
+
+          <div id="main-findings" class="main-panel" style="display: none">
+            <div class="findings" id="findings"></div>
+          </div>
+
+          <div id="main-explorer" class="main-panel" style="display: none">
+            <div class="explorer-sub-bar">
+              <div class="tabs" id="explorer-tabs">
+                <button class="tab active" data-tab="instructions">
+                  Instructions
+                </button>
+                <button class="tab" data-tab="tree">Block Tree</button>
+                <button class="tab" data-tab="raw">Raw JSON</button>
+              </div>
+            </div>
+            <div class="explorer-body">
+              <div id="exp-instructions" class="exp-panel active">
+                <div style="overflow-x: auto">
+                  <table class="itbl" id="instr-table"></table>
+                </div>
+              </div>
+
+              <div id="exp-tree" class="exp-panel">
+                <div class="tree" id="block-tree"></div>
+              </div>
+
+              <div id="exp-raw" class="exp-panel">
+                <div class="raw-wrap">
+                  <div class="raw-toolbar">
+                    <div id="raw-nav" class="raw-nav"></div>
+                    <button class="btn-sm btn-copy" id="raw-copy-btn">Copy</button>
+                  </div>
+                  <div class="raw-pre" id="raw-pre"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast">Copied!</div>
+
+    <script src="../assets/js/access.js" defer></script>
+    <script src="https://unpkg.com/jsoneditor@9/dist/jsoneditor.min.js" defer></script>
+    <script src="../assets/js/template-validator-core.js" defer></script>
+    <script src="../assets/js/template-validator-app.js" defer></script>
+  </body>
+</html>

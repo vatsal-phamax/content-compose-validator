@@ -5,28 +5,303 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Validate content compose output JSON with structured findings and explorer views."
+      content="Ariya validator home page with access to Content Compose and Template validators."
     />
-    <title>Ariya — Content Compose Validator</title>
+    <title>Ariya — Validator Home</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap"
       rel="stylesheet"
     />
     <link
       rel="icon"
       href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23f97316'/><path d='M9 17l5 5 9-10' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/></svg>"
     />
-    <link rel="stylesheet" href="https://unpkg.com/jsoneditor@9/dist/jsoneditor.min.css" />
-    <link rel="stylesheet" href="assets/css/styles.css" />
     <script>
-      if (sessionStorage.getItem("ariya_unlocked") === "1")
+      if (sessionStorage.getItem("ariya_unlocked") === "1") {
         document.documentElement.dataset.unlocked = "1";
+      }
     </script>
+    <style>
+      :root {
+        --bg: #f7fafc;
+        --surface: #ffffff;
+        --surface-2: #fff7ed;
+        --border: #e2e8f0;
+        --text: #0f172a;
+        --text-2: #475569;
+        --accent: #f97316;
+        --accent-dark: #ea580c;
+        --shadow-md: 0 12px 30px rgba(15, 23, 42, 0.07);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(1000px 500px at 100% -20%, #ffedd5 0%, transparent 60%),
+          radial-gradient(900px 420px at -10% 120%, #dbeafe 0%, transparent 55%),
+          var(--bg);
+      }
+
+      .home {
+        min-height: 100dvh;
+        padding: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .home-inner {
+        width: min(980px, 100%);
+      }
+
+      .hero {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 22px;
+      }
+
+      .hero-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .brand-icon {
+        width: 34px;
+        height: 34px;
+        background: linear-gradient(135deg, var(--accent), #fb923c);
+        color: #fff;
+        border-radius: 8px;
+        display: grid;
+        place-items: center;
+        box-shadow: 0 6px 16px rgba(249, 115, 22, 0.32);
+      }
+
+      .hero h1 {
+        margin: 0;
+        font-size: clamp(24px, 3.2vw, 34px);
+        letter-spacing: -0.5px;
+        line-height: 1.1;
+      }
+
+      .badge {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        color: #fff;
+        background: var(--accent);
+        border-radius: 999px;
+        padding: 4px 9px;
+      }
+
+      .sub {
+        margin: 6px 0 0;
+        color: var(--text-2);
+        font-size: 14px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .card {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 22px;
+        box-shadow: var(--shadow-md);
+        transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-2px);
+        border-color: #fdba74;
+        box-shadow: 0 16px 32px rgba(15, 23, 42, 0.1);
+      }
+
+      .card-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+
+      .card-title {
+        font-size: 17px;
+        font-weight: 700;
+      }
+
+      .arrow {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 15px;
+        color: var(--accent-dark);
+      }
+
+      .card p {
+        margin: 0;
+        color: var(--text-2);
+        font-size: 13.5px;
+        line-height: 1.55;
+      }
+
+      .card-k {
+        margin-top: 14px;
+        display: inline-block;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        color: #9a3412;
+        background: var(--surface-2);
+        border: 1px solid #fed7aa;
+        border-radius: 6px;
+        padding: 4px 8px;
+      }
+
+      @media (max-width: 760px) {
+        .home {
+          padding: 18px;
+          align-items: flex-start;
+        }
+
+        .hero {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .gate-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(248, 250, 252, 0.96);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+      }
+
+      [data-unlocked] .gate-overlay {
+        display: none;
+      }
+
+      .gate-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 34px 28px;
+        width: min(380px, calc(100% - 28px));
+        box-shadow: var(--shadow-md);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .gate-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: center;
+      }
+
+      .brand-name {
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .brand-badge {
+        font-size: 9.5px;
+        font-weight: 700;
+        letter-spacing: 0.9px;
+        padding: 2px 8px;
+        border-radius: 20px;
+        background: linear-gradient(120deg, var(--accent), #fb923c);
+        color: #fff;
+      }
+
+      .gate-desc {
+        font-size: 13.5px;
+        color: var(--text-2);
+        text-align: center;
+      }
+
+      .gate-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .gate-input {
+        width: 100%;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--text);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px;
+        padding: 10px 14px;
+        outline: none;
+        transition: border-color 0.15s, box-shadow 0.15s;
+        text-align: center;
+        letter-spacing: 3px;
+      }
+
+      .gate-input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.08);
+      }
+
+      .gate-input::placeholder {
+        letter-spacing: normal;
+      }
+
+      .btn {
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 10px 14px;
+        font-size: 13.5px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .btn-full {
+        width: 100%;
+      }
+
+      .gate-error {
+        font-size: 12px;
+        color: #dc2626;
+        text-align: center;
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 6px;
+        padding: 8px 12px;
+      }
+    </style>
   </head>
   <body>
-    <!-- ── Access Gate ── -->
     <div id="gate-overlay" class="gate-overlay">
       <div class="gate-card">
         <div class="gate-brand">
@@ -47,7 +322,7 @@
               />
             </svg>
           </div>
-          <span class="brand-name">Content Compose Validator</span>
+          <span class="brand-name">Validator Home Access</span>
           <span class="brand-badge">ARIYA</span>
         </div>
         <p class="gate-desc">Enter your access key to continue.</p>
@@ -67,226 +342,62 @@
       </div>
     </div>
 
-    <div class="app-shell">
-      <!-- ── Header ── -->
-      <header class="app-header">
-        <div class="header-brand">
-          <div class="brand-icon">
-            <svg viewBox="0 0 20 20" fill="none" width="16" height="16">
-              <path
-                d="M10 2.5L3.5 6.75v6.5L10 17.5l6.5-4.25v-6.5L10 2.5z"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M7.5 10.5l1.75 1.75 3.25-3.5"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </div>
-          <span class="brand-name">Content Compose Validator</span>
-          <span class="brand-badge">ARIYA</span>
-        </div>
-        <div class="header-actions">
-          <button class="btn-ghost" id="reset-btn" style="display: none">
-            <svg
-              viewBox="0 0 14 14"
-              fill="none"
-              width="12"
-              height="12"
-              aria-hidden="true"
-            >
-              <path
-                d="M2 7a5 5 0 1 1 1.5 3.5"
-                stroke="currentColor"
-                stroke-width="1.4"
-                stroke-linecap="round"
-              />
-              <path
-                d="M2 10.5V7h3.5"
-                stroke="currentColor"
-                stroke-width="1.4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-            Reset
-          </button>
-        </div>
-      </header>
-
-      <!-- ── Split body ── -->
-      <div class="app-body">
-        <!-- ── LEFT: upload only ── -->
-        <div class="panel-left">
-          <div class="panel-section" id="upload-section">
-            <div class="section-eyebrow">Input</div>
-            <div class="upload-stack">
-              <div id="drop-zone" class="drop-zone">
-                <div class="drop-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
-                    <path
-                      d="M8 7V5.5C8 4.12 9.12 3 10.5 3h3C14.88 3 16 4.12 16 5.5V7"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                    />
-                    <rect
-                      x="5"
-                      y="7"
-                      width="14"
-                      height="14"
-                      rx="2"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                    />
-                    <path
-                      d="M12 11v6m0 0l-2.5-2.5M12 17l2.5-2.5"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </div>
-                <strong>Drop output_design_*.json here</strong>
-                <p>or click to choose file</p>
-                <input
-                  type="file"
-                  id="file-input"
-                  accept=".json"
-                  style="display: none"
-                />
-              </div>
-              <div class="paste-pane">
-                <div class="divider">or paste JSON</div>
-                <textarea
-                  id="paste"
-                  placeholder="Paste output_design_*.json content here..."
-                ></textarea>
-              </div>
-              <button class="btn btn-full" id="run-btn">Run Validation</button>
-              <button class="btn-ghost btn-full" id="reset-btn-inline" style="display:none">
-                <svg viewBox="0 0 14 14" fill="none" width="12" height="12" aria-hidden="true">
-                  <path d="M2 7a5 5 0 1 1 1.5 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-                  <path d="M2 10.5V7h3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    <main class="home">
+      <section class="home-inner">
+        <div class="hero">
+          <div>
+            <div class="hero-left">
+              <div class="brand-icon" aria-hidden="true">
+                <svg viewBox="0 0 20 20" fill="none" width="16" height="16">
+                  <path
+                    d="M10 2.5L3.5 6.75v6.5L10 17.5l6.5-4.25v-6.5L10 2.5z"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M7.5 10.5l1.75 1.75 3.25-3.5"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
                 </svg>
-                Reset
-              </button>
+              </div>
+              <span class="badge">ARIYA</span>
             </div>
+            <h1>Validator Home</h1>
+            <p class="sub">Choose a validator to continue.</p>
           </div>
         </div>
 
-        <!-- ── RIGHT: findings + explorer ── -->
-        <div class="panel-right">
-          <!-- Context bar (summary + meta) — shown after validation -->
-          <div id="context-panel" style="display: none" class="context-panel">
-            <div class="summary" id="summary"></div>
-            <div class="meta" id="meta"></div>
-          </div>
-
-          <!-- Main tab bar — shown after validation -->
-          <div id="main-tab-bar" class="main-tab-bar" style="display: none">
-            <button class="main-tab active" data-main="findings">
-              Findings
-              <span class="mtab-badge" id="mtab-count"></span>
-            </button>
-            <button class="main-tab" data-main="explorer">Explorer</button>
-          </div>
-
-          <!-- Empty state — shown before validation -->
-          <div id="explorer-empty" class="explorer-empty">
-            <div class="explorer-empty-icon" aria-hidden="true">
-              <svg viewBox="0 0 52 52" fill="none" width="52" height="52">
-                <rect
-                  x="11"
-                  y="5"
-                  width="30"
-                  height="40"
-                  rx="3"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                />
-                <path
-                  d="M17 17h18M17 23h18M17 29h12"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                />
-                <circle
-                  cx="38"
-                  cy="38"
-                  r="8"
-                  fill="var(--bg)"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                />
-                <path
-                  d="M36 38h4M38 36v4"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                />
-              </svg>
+        <div class="grid">
+          <a class="card" href="validators/content-compose-validator.html">
+            <div class="card-head">
+              <div class="card-title">Content Compose Validator</div>
+              <span class="arrow">-&gt;</span>
             </div>
-            <p class="explorer-empty-title">No validation results yet</p>
-            <p class="explorer-empty-desc">
-              Upload or paste an <code>output_design_*.json</code> file, then
-              hit Run Validation.
+            <p>
+              Validate output_design JSON, inspect findings, references,
+              generated blocks, and raw structured output.
             </p>
-          </div>
+            <span class="card-k">output_design_*.json</span>
+          </a>
 
-          <!-- Findings panel -->
-          <div id="main-findings" class="main-panel" style="display: none">
-            <div class="findings" id="findings"></div>
-          </div>
-
-          <!-- Explorer panel -->
-          <div id="main-explorer" class="main-panel" style="display: none">
-            <div class="explorer-sub-bar">
-              <div class="tabs" id="explorer-tabs">
-                <button class="tab active" data-tab="blocks">
-                  Generated Blocks
-                </button>
-                <button class="tab" data-tab="refs">References</button>
-                <button class="tab" data-tab="selection">Selection</button>
-                <button class="tab" data-tab="raw">Raw JSON</button>
-              </div>
+          <a class="card" href="validators/template-validator.html">
+            <div class="card-head">
+              <div class="card-title">Template Validator</div>
+              <span class="arrow">-&gt;</span>
             </div>
-            <div class="explorer-body">
-              <div id="exp-blocks" class="exp-panel active">
-                <div class="block-cards" id="block-cards"></div>
-              </div>
-              <div id="exp-refs" class="exp-panel">
-                <div class="refs-grid" id="refs-grid"></div>
-              </div>
-              <div id="exp-selection" class="exp-panel">
-                <div id="sel-content"></div>
-              </div>
-              <div id="exp-raw" class="exp-panel">
-                <div class="raw-wrap">
-                  <div class="raw-toolbar">
-                    <div id="raw-nav" class="raw-nav"></div>
-                    <button class="btn-sm btn-copy" id="raw-copy-btn">Copy</button>
-                  </div>
-                  <div class="raw-pre" id="raw-pre"></div>
-                </div>
-              </div>
-            </div>
-          </div>
+            <p>
+              Validate template.json structure, instructions coverage,
+              constraints quality, and block tree consistency.
+            </p>
+            <span class="card-k">template.json</span>
+          </a>
         </div>
-      </div>
-    </div>
-
-    <div class="toast" id="toast">Copied!</div>
-
-    <script src="https://unpkg.com/jsoneditor@9/dist/jsoneditor.min.js" defer></script>
+      </section>
+    </main>
     <script src="assets/js/access.js" defer></script>
-    <script src="assets/js/validator-core.js" defer></script>
-    <script src="assets/js/app.js" defer></script>
   </body>
 </html>
