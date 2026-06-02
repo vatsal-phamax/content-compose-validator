@@ -1169,28 +1169,48 @@ div.jsoneditor-tree table.jsoneditor-tree {
   background: var(--surface-2) !important;
 }
 
-.jsoneditor-field {
+div.jsoneditor-field {
   color: #2563eb !important;
 }
 
-.jsoneditor-string {
+div.jsoneditor-value.jsoneditor-string {
   color: #16a34a !important;
 }
 
-.jsoneditor-number {
+div.jsoneditor-value.jsoneditor-number {
   color: #d97706 !important;
 }
 
-.jsoneditor-boolean {
+div.jsoneditor-value.jsoneditor-boolean {
   color: #7c3aed !important;
 }
 
-.jsoneditor-null {
+div.jsoneditor-value.jsoneditor-null {
   color: #dc2626 !important;
+}
+
+div.jsoneditor-value.jsoneditor-object,
+div.jsoneditor-value.jsoneditor-array {
+  color: var(--text-muted) !important;
 }
 
 .jsoneditor td.jsoneditor-separator {
   color: var(--text-muted) !important;
+  padding: 0 2px !important;
+}
+
+/* Remove dashed outline on focused values in view mode */
+div.jsoneditor-value[contenteditable] {
+  outline: none !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+div.jsoneditor-value[contenteditable]:focus {
+  outline: none !important;
+  border: none !important;
+  background: rgba(249, 115, 22, 0.06) !important;
+  border-radius: 3px !important;
 }
 
 .jsoneditor-search input {
