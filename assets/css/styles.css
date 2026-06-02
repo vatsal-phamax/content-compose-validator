@@ -1364,9 +1364,22 @@ textarea:focus-visible,
     padding: 22px 14px;
   }
 
+  /* iOS: prevent viewport zoom on input focus */
+  textarea,
+  input,
+  .gate-input {
+    font-size: 16px !important;
+  }
+
   textarea {
     min-height: 110px;
-    font-size: 12px;
+  }
+
+  /* Gate */
+  .gate-card {
+    margin: 16px;
+    padding: 32px 24px;
+    max-width: 100%;
   }
 
   .main-panel  { overflow: visible; }
@@ -1379,11 +1392,8 @@ textarea:focus-visible,
 
   .main-tab {
     margin-right: 16px;
-    padding: 10px 2px;
-  }
-
-  .context-panel {
-    overflow-x: hidden;
+    min-height: 44px;
+    padding: 0 2px;
   }
 
   .s-card {
@@ -1410,6 +1420,7 @@ textarea:focus-visible,
 
   .tab {
     flex: 0 0 auto;
+    min-height: 36px;
   }
 
   .explorer-body {
@@ -1421,8 +1432,10 @@ textarea:focus-visible,
     grid-template-columns: 1fr;
   }
 
+  /* Findings rows — larger touch target */
   .fh {
-    padding: 11px 12px;
+    min-height: 52px;
+    padding: 10px 12px;
     flex-wrap: wrap;
     align-items: flex-start;
     gap: 8px;
@@ -1450,6 +1463,7 @@ textarea:focus-visible,
   }
 
   .bcard-head {
+    min-height: 48px;
     padding: 10px 12px;
     flex-wrap: wrap;
     row-gap: 6px;
@@ -1477,14 +1491,25 @@ textarea:focus-visible,
 
   .items li {
     word-break: break-word;
+    padding: 9px 12px;
   }
 
   .sel-table {
     min-width: 560px;
   }
 
+  /* Raw panel */
+  .raw-toolbar {
+    padding: 8px 12px 6px;
+    gap: 8px;
+  }
+
   .raw-pre {
-    max-height: none;
+    font-size: 11px;
+  }
+
+  .jt-chip {
+    padding: 3px 8px;
   }
 
   .toast {
@@ -1502,8 +1527,36 @@ textarea:focus-visible,
     display: none;
   }
 
+  /* Gate — slim card on small phones */
+  .gate-card {
+    margin: 12px;
+    padding: 28px 16px;
+    gap: 14px;
+  }
+
+  .gate-brand {
+    gap: 8px;
+  }
+
+  .gate-desc {
+    font-size: 13px;
+  }
+
+  /* Summary: 2×2 grid instead of single column */
   .summary {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .s-card:nth-child(-n+2) {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .s-card:nth-child(even) {
+    border-right: none;
+  }
+
+  .s-card .n {
+    font-size: 20px;
   }
 
   .main-tab {
@@ -1518,11 +1571,21 @@ textarea:focus-visible,
 
   .btn,
   .btn-ghost {
-    min-height: 36px;
+    min-height: 44px;
   }
 
+  /* Raw panel */
   .raw-toolbar {
     flex-wrap: wrap;
+  }
+
+  .raw-nav {
+    order: 2;
+    width: 100%;
+  }
+
+  #raw-copy-btn {
+    margin-left: auto;
   }
 
   .raw-pre {
